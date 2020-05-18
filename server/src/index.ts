@@ -10,7 +10,8 @@ import { createConnection } from "typeorm";
 import cookieParser from 'cookie-parser'
 import { verify } from "jsonwebtoken";
 import { User } from "./entity/User";
-import { createAccessToken } from "./auth";
+import { createAccessToken, createRefreshToken } from "./auth";
+import { sendRefreshToken } from "./sendRefreshToken";
 
 
 
@@ -40,6 +41,17 @@ import { createAccessToken } from "./auth";
         if(!user) {
             return res.send({ok: false, accessToken: "3"})  
         }
+        try {
+        if(user.tokenVersion !== payload.tokenVersion){
+            return res.send({ok: false, accessToken:""});
+        }
+    } catch (error) {
+        console.log(error);
+       // return res.send({ok: false, accessToken: "2"})
+        
+    }
+        
+        sendRefreshToken(res, createRefreshToken(user));
 
         return res.send({ok: true, accessToken: createAccessToken(user)});
     });
