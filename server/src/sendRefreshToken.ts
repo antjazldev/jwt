@@ -4,7 +4,8 @@ export const sendRefreshToken = (res: Response, token: string) => {
     res.cookie('gid',token,
       
         {
-            httpOnly:true
+            httpOnly:true,
+            path:"/refresh_token"
   
         });
 };

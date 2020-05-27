@@ -1,0 +1,4 @@
+mutation Register($email: String!, $password:String!){
+  resigter(email:$email,password:$password)
+  
+}

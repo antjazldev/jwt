@@ -1,17 +1,29 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react'
 
-import { useHelloQuery } from './generated/graphql';
+import { setAccessToken } from './accessToken';
+import { Routes } from './Routes';
+interface Props {}
+
+export const App: React.FC<Props> = () => {
+    const [loading,setLoading] = useState(true);
+
+    useEffect(()=> {
+        fetch("http://localhost:4000/refresh_token",{
+        method:"POST",
+        credentials:"include"
+    }).then(async x => {
+        const {accessToken} = await x.json();
+        console.log({accessToken});
+        setAccessToken(accessToken);
+        setLoading(false);
+    });
+    },[]);
+    if(loading) {
+        return <div> loading...</div>;
+    }
 
 
-function App() {
-const {data,loading} = useHelloQuery()
-if(loading || !data){
-  return <div> loading...</div>
+
+
+    return (<Routes/>);
 }
-
-  return (
-  <div>{data.hello}</div>
-  );
-}
-
-export default App;
