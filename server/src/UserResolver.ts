@@ -60,6 +60,13 @@ export class UserResolver{
     }
 
     @Mutation(()=>Boolean)
+    async logout(@Ctx() {res}:MyContext){
+        sendRefreshToken(res,""); 
+     
+     return true;
+    }
+
+    @Mutation(()=>Boolean)
     async revokeRegreshTokensForUser(
     @Arg('userId',() => Int) userId: number
     ){
